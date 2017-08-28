@@ -1377,6 +1377,7 @@ function _setup_security_stack() {
 	dms_amavis_file="/etc/amavis/conf.d/61-dms_auto_generated"
   echo "# WARNING: this file is auto-generated." > $dms_amavis_file
 	echo "use strict;" >> $dms_amavis_file
+	echo '$max_servers = 1;' >> $dms_amavis_file
 
 	# Spamassassin
 	if [ "$ENABLE_SPAMASSASSIN" = 0 ]; then

@@ -100,13 +100,18 @@ policyd-spf  unix  -       n       n       -       0       spawn
 # Amavis configuration
 #
 
-smtp-amavis     unix    -       -       n       -       2       smtp
+# Column 7 lists the number of processes of this type.
+# update amavix $max_servers = X; to increase
+smtp-amavis     unix    -       -       n       -       1       smtp
   -o smtp_data_done_timeout=1200
   -o smtp_send_xforward_command=yes
   -o disable_dns_lookups=yes
   -o max_use=20
   -o smtp_tls_security_level=none
 
+# for reinjection of mail into postfix after processing by amavis.
+# 'content_filter=' disables content filtering when mail comes in
+# there (avoids loops).
 127.0.0.1:10025 inet    n       -       n       -       -       smtpd
   -o content_filter=
   -o local_recipient_maps=
