@@ -27,9 +27,15 @@ submission inet n       -       n       -       -       smtpd
   -o milter_macro_daemon_name=ORIGINATING
   -o cleanup_service_name=sender-cleanup
 
-smtps     inet  n       -       n       -       -       smtpd
+# postfix tls_wrapper mode.
+#
+# this config is identical to the smtpd config above, with the
+# exception that postfix wraps the connection in a TLS tunnel right
+# away, rather than doing the STARTTLS.
+smtps      inet n       -       n       -       -       smtpd
   -o syslog_name=postfix/smtps
   -o smtpd_tls_wrappermode=yes
+  -o smtpd_tls_security_level=encrypt
   -o smtpd_sasl_auth_enable=yes
   -o smtpd_sasl_type=dovecot
   -o smtpd_sasl_path=private/auth
