@@ -18,6 +18,8 @@ if ! _docker_image_exists "${IMG_NAME}"; then
      docker build -t  "${IMG_NAME}" .
 fi
 
+# leave the deb behind
 docker run --rm -v "$HERE":/build "${IMG_NAME}" "$@"
 
-#docker rmi postprox-builder
+# trash the rest
+docker rmi postprox-builder
