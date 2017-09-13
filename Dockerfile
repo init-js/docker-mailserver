@@ -25,6 +25,7 @@ RUN apt-get update -q --fix-missing && \
     cabextract \
     clamav \
     clamav-daemon \
+    clamdscan \
     cpio \
     curl \
     dovecot-core \
@@ -65,6 +66,7 @@ RUN apt-get update -q --fix-missing && \
     rsyslog \
     sasl2-bin \
     spamassassin \
+    spamc \
     supervisor \
     postgrey \
     unrar-free \
@@ -87,6 +89,17 @@ RUN apt-get update -q --fix-missing && \
   touch /var/log/auth.log && \
   update-locale && \
   rm -f /etc/cron.weekly/fstrim
+
+# FIXMES
+# - make spamd run as new system user
+# - control max size of email attachment in various daemons
+# - test eicar
+# - test regular
+# - test large file
+COPY postprox/postprox_0.2.0-1_amd64.deb /tmp/postprox.deb
+RUN useradd postprox -m -r -s /sbin/nologin && \
+    dpkg -i /tmp/postprox.deb && \
+    rm /tmp/postprox.deb
 
 RUN echo "0 0,6,12,18 * * * /usr/bin/freshclam --quiet" > /etc/cron.d/freshclam && \
   chmod 644 /etc/clamav/freshclam.conf && \

@@ -83,16 +83,26 @@ policyd-spf  unix  -       n       n       -       0       spawn
     user=policyd-spf argv=/usr/bin/policyd-spf
 
 #
-# Amavis configuration
+# postprox configuration
 #
-
-smtp-amavis     unix    -       -       n       -       2       smtp
+# N.B. removed `disable_dns_lookup` option.
+# disable_dns_lookup=yes is replaced with smtp_dns_support_level=none, and
+# that setting is no longer recommended for content_filters
+#
+# see http://www.postfix.org/postconf.5.html#smtp_dns_support_level
+#
+smtp-postprox   unix    -       -       n       -       2       smtp -v
   -o smtp_data_done_timeout=1200
   -o smtp_send_xforward_command=yes
-  -o disable_dns_lookups=yes
   -o max_use=20
   -o smtp_tls_security_level=none
 
+# postprox will feed back into post-filter smtpd (port 10025)
+# spawn requires privileged, presumably to setuid as user postprox.
+127.0.0.1:10023	inet	n	n	n	-	2	spawn
+  user=postprox argv=/usr/sbin/postprox -v -r -c /usr/local/bin/postprox-filter.sh 127.0.0.1:10025
+
+# reinjection. we assume mail has passed through all filters.
 127.0.0.1:10025 inet    n       -       n       -       -       smtpd
   -o content_filter=
   -o local_recipient_maps=

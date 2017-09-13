@@ -165,6 +165,10 @@ function register_functions() {
 
 	_register_start_daemon "_start_daemons_postfix"
 
+	if [ "$ENABLE_SPAMASSASSIN" = 1 ]; then
+		_register_start_daemon "_start_daemons_spamassassin"
+	fi
+
 	if [ "$ENABLE_SASLAUTHD" = 1 ];then
 		_register_start_daemon "_start_daemons_saslauthd"
 	fi
@@ -1131,6 +1135,11 @@ function _start_daemons_rsyslog() {
 function _start_daemons_saslauthd() {
 	notify 'task' 'Starting saslauthd' 'n'
     supervisorctl start "saslauthd_${SASLAUTHD_MECHANISMS}"
+}
+
+function _start_daemons_spamassassin() {
+	notify 'task' 'Starting spamassassin (spamd)' 'n'
+	supervisorctl start "spamassassin"
 }
 
 function _start_daemons_fail2ban() {
