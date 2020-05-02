@@ -1,4 +1,4 @@
-NAME = tvial/docker-mailserver:testing
+NAME ?= tvial/docker-mailserver:testing
 VCS_REF := $(shell git rev-parse --short HEAD)
 VCS_VERSION := $(shell git describe --tags --contains --always)
 
