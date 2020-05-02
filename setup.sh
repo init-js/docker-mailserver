@@ -13,7 +13,7 @@ IMAGE_NAME=$(echo $INFO | awk '{print $1}')
 CONTAINER_NAME=$(echo $INFO | awk '{print $2}')
 
 if [ -z "$IMAGE_NAME" ]; then
-  IMAGE_NAME=tvial/docker-mailserver:latest
+  IMAGE_NAME=mailtest
 fi
 
 _inspect() {
